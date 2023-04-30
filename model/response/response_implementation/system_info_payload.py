@@ -12,6 +12,7 @@ from util.net_converter import nic_addr
 class SystemInfoPayload(BasePayload):
     def __init__(self):
         self.boot = {
+            "timestamp": psutil.boot_time(),
             "time": datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
         }
         self.cpu = {
