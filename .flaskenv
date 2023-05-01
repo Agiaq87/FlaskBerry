@@ -1,0 +1,2 @@
+FLASK_APP=FlaskBerry
+FLASK_DEBUG=development
