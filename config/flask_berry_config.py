@@ -2,6 +2,7 @@ from config.singleton import Singleton
 
 
 class FlaskBerryConfig(metaclass=Singleton):
+    _num_of_response: int
 
     def __init__(self):
         self._version = 0.1
