@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from model.writer.base_serializable import BaseSerializable
 
 
-class BaseFileWriter(ABC):
+class BaseFileWriterModule(ABC):
     @abstractmethod
     async def write(self, data: str) -> bool:
         pass
