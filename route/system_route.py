@@ -14,7 +14,7 @@ system_blueprint = Blueprint("system", __name__, description="system information
 @system_blueprint.route("/system")
 class SystemBlueprint(MethodView, BaseRoute):
 
-    def connect(self, data: Optional[Optional[str]]) -> str:
+    def connect(self, data: Optional[str] | None) -> str:
         return SimpleInfoResponse(UnimplementedMessagePayload()).to_json()
 
     def delete(self) -> str:
