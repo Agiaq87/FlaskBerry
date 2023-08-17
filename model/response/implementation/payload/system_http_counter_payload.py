@@ -1,5 +1,5 @@
+from di.system_counter.system_counter_manager import SystemCounterManager
 from model.response.base_payload import BasePayload
-from model.system_counter.system_counter_manager import SystemCounterManager
 
 
 class SystemHttpCounterPayload(BasePayload):

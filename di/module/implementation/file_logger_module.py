@@ -1,5 +1,5 @@
-from model.writer.base_serializable import BaseSerializable
 from di.module.base_file_writer_module import BaseFileWriterModule
+from model.writer.base_serializable import BaseSerializable
 
 
 class FileLoggerModule(BaseFileWriterModule):
@@ -7,7 +7,7 @@ class FileLoggerModule(BaseFileWriterModule):
         return False
 
     async def write(self, data: str) -> bool:
-        self.file.write(data)
+        return self.file.write(data) != 0
 
     def __init__(self, file_name: str, protected: bool = False):
         if protected:

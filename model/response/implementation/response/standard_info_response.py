@@ -1,9 +1,10 @@
 import datetime as dt
 import json
+
 from config.flask_berry_config import FlaskBerryConfig
+from di.system_counter.system_counter_manager import SystemCounterManager
 from model.response.base_payload import BasePayload
 from model.response.base_response import BaseResponse
-from model.system_counter.system_counter_manager import SystemCounterManager
 
 
 class StandardInfoResponse(BaseResponse):

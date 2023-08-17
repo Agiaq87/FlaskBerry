@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Optional
 
+from di.system_counter.system_counter_manager import SystemCounterManager
 from model.http.http_methods import HttpMethod
-from model.system_counter.system_counter_manager import SystemCounterManager
 
 
 class BaseRoute(ABC):
