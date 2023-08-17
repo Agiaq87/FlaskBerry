@@ -1,40 +1,47 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from model.http.http_methods import HttpMethod
+from model.system_counter.system_counter_manager import SystemCounterManager
+
 
 class BaseRoute(ABC):
-    @abstractmethod
-    def connect(self, data: Optional[Optional[str]]) -> str:
+
+    def __init__(self):
+        self._systemManagerCounter = SystemCounterManager()
+
+    def connect(self, data: Optional[str]):
+        self._systemManagerCounter.increment(HttpMethod.CONNECT)
         pass
 
-    @abstractmethod
-    def delete(self) -> str:
+    def delete(self):
+        self._systemManagerCounter.increment(HttpMethod.DELETE)
         pass
 
-    @abstractmethod
-    def get(self) -> str:
+    def get(self):
+        self._systemManagerCounter.increment(HttpMethod.GET)
         pass
 
-    @abstractmethod
     def head(self):
+        self._systemManagerCounter.increment(HttpMethod.HEAD)
         pass
 
-    @abstractmethod
-    def options(self) -> str:
+    def options(self):
+        self._systemManagerCounter.increment(HttpMethod.OPTIONS)
         pass
 
-    @abstractmethod
-    def patch(self) -> str:
+    def patch(self):
+        self._systemManagerCounter.increment(HttpMethod.PATCH)
         pass
 
-    @abstractmethod
-    def post(self) -> str:
+    def post(self):
+        self._systemManagerCounter.increment(HttpMethod.POST)
         pass
 
-    @abstractmethod
-    def put(self) -> str:
+    def put(self):
+        self._systemManagerCounter.increment(HttpMethod.PUT)
         pass
 
-    @abstractmethod
-    def trace(self) -> str:
+    def trace(self):
+        self._systemManagerCounter.increment(HttpMethod.TRACE)
         pass
