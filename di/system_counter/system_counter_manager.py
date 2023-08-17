@@ -1,6 +1,5 @@
 import json
 
-from config import singleton
 from config.singleton import Singleton
 from model.http.http_methods import HttpMethod
 
