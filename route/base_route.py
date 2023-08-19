@@ -23,7 +23,6 @@ class BaseRoute(ABC):
         # if self._persistence.is_unknown_user(request.remote_user):
         #    return RestrictedInfoResponse(PresentYourselfPayload()).to_json()
         self._systemManagerCounter.increment(HttpMethod.GET)
-        pass
 
     def head(self):
         self._systemManagerCounter.increment(HttpMethod.HEAD)

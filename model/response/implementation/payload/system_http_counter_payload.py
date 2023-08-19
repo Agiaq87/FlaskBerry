@@ -12,3 +12,4 @@ class SystemHttpCounterPayload(BasePayload):
 
     def require_json_array(self) -> bool:
         return False
+

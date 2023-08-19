@@ -1,3 +1,4 @@
+from getmac import get_mac_address
 from psutil._common import snetio, snicaddr
 
 from util.memory_converter import memory_converter
@@ -58,3 +59,7 @@ def snetio_converter(dictionary: {str, snetio}) -> {}:
             "dropout": value[7]
         }
     return t
+
+
+def mac_from_ip(ip_address: str) -> str | None:
+    return get_mac_address(ip=ip_address, network_request=True)

@@ -9,7 +9,7 @@ class SystemCounterManager(object, metaclass=Singleton):
     def __init__(self):
         self.total = 0
         self.httpCounter = {
-            'ok': 0, 'error': 0, 'redirect': 0
+            'ok': 0, 'error': 0, 'warning': 0, 'redirect': 0
         }
         self.httpMethodCounter = {
             'CONNECT': 0,
@@ -26,7 +26,7 @@ class SystemCounterManager(object, metaclass=Singleton):
     def read(self) -> int:
         return self.total
 
-    def increment(self, http_method: HttpMethod | None = None) -> int:
+    def increment(self, http_method: HttpMethod | None) -> int:
         self.total += 1
         self.httpCounter['ok'] += 1
 

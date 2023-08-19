@@ -17,3 +17,25 @@ class FlaskBerryConfig(metaclass=Singleton):
 
     def number_of_try_for_presentation(self) -> int:
         return 3
+
+    def number_for_permaban(self) -> int:
+        return 3
+
+    def delay_of_try_for_presentation(self) -> int:
+        return 5
+
+    def delta_for_delay_try_presentation(self, counted: int) -> float:
+        default = self.number_of_try_for_presentation()
+        if default < counted < (default * 2):
+            return 1.5
+
+        if (default * 2) < counted < (default * 3):
+            return 2.5
+
+        if (default * 3) < counted < (default * 4):
+            return 5
+
+        if (default * 4) < counted < (default * 5):
+            return 10
+        else:
+            return 100

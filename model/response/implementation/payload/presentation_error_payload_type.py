@@ -2,5 +2,8 @@ from enum import Enum
 
 
 class PresentationErrorPayloadType(Enum):
-    MAC_ADDRESS_NOT_DEFINED = 0,
-    REQUEST_ERROR_TRY = 100
+    ARGS_NOT_PRESENT = 2,
+    INCORRECT_ARGS = 3,
+    ARGS_NOT_EQ = 4,
+    MAXIMUM_NUMBER_OF_TRY = 100,
+    PERMABAN = 111
