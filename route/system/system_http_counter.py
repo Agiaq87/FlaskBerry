@@ -1,11 +1,8 @@
-from typing import Optional
-
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
 from model.response.implementation.payload.invalid_http_method_message_payload import InvalidHttpMethodMessagePayload
 from model.response.implementation.payload.system_http_counter_payload import SystemHttpCounterPayload
-from model.response.implementation.payload.system_info_payload import SystemInfoPayload
 from model.response.implementation.response.restricted_info_response import RestrictedInfoResponse
 from model.response.implementation.response.standard_info_response import StandardInfoResponse
 from route.base_route import BaseRoute
