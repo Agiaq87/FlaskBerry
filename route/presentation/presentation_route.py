@@ -3,9 +3,11 @@ from flask.views import MethodView
 from flask_smorest import Blueprint
 
 from di.persistence.persistence_presentation_manager import PersistenceUserSessionManager
+from model.http.http_methods import HttpMethod
 from model.response.implementation.payload.invalid_http_method_message_payload import InvalidHttpMethodMessagePayload
 from model.response.implementation.payload.presentation_error_payload import PresentationErrorPayload
-from model.response.implementation.payload.presentation_error_payload_type import PresentationErrorPayloadType
+from model.response.implementation.payload.presentation_error_payload_type import PresentationPayloadType
+from model.response.implementation.payload.presentation_ok_payload import PresentationOkPayload
 from model.response.implementation.response.restricted_info_response import RestrictedInfoResponse
 from model.state.user_session_state import UserSessionState
 from route.base_route import BaseRoute
@@ -46,28 +48,35 @@ class PresentationBlueprint(MethodView, BaseRoute):
         # Check if presentation have correct argument
         if mac_address_client is None:
             return self.persistence_user_session_response(
-                PresentationErrorPayloadType.ARGS_NOT_PRESENT,
-                PresentationErrorPayloadType.MAXIMUM_NUMBER_OF_TRY
+                None,
+                PresentationPayloadType.ARGS_NOT_PRESENT,
+                PresentationPayloadType.MAXIMUM_NUMBER_OF_TRY
             )
 
         # Check if client mac is okay with regex
         if not check_mac_address(mac_address_client):
             return self.persistence_user_session_response(
-                PresentationErrorPayloadType.INCORRECT_ARGS,
-                PresentationErrorPayloadType.MAXIMUM_NUMBER_OF_TRY
+                None,
+                PresentationPayloadType.INCORRECT_ARGS,
+                PresentationPayloadType.MAXIMUM_NUMBER_OF_TRY
             )
 
         # Check if mac client equals retrieved mac
-        if not mac_address_read == mac_from_ip(mac_address_client):
+        if not mac_address_read == mac_address_client:
             return self.persistence_user_session_response(
-                PresentationErrorPayloadType.ARGS_NOT_EQ,
-                PresentationErrorPayloadType.MAXIMUM_NUMBER_OF_TRY
+                None,
+                PresentationPayloadType.ARGS_NOT_EQ,
+                PresentationPayloadType.MAXIMUM_NUMBER_OF_TRY
             )
 
-        # First session ok
-        self._persistence.register_correct_presentation(mac_address_client)
+        # First session ok, count how much try user attempt and it's first try
+        self._persistence.register_correct_presentation(mac_address_client, HttpMethod.GET)
 
-        return "OK"
+        return self.persistence_user_session_response(
+            PresentationPayloadType.FIRST_STEP_GET_OK,
+            PresentationPayloadType.ALREADY_ATTEMPT_FIRST_STEP,
+            PresentationPayloadType.MAXIMUM_NUMBER_OF_TRY
+        )
 
     def head(self):
         super().head()
@@ -81,11 +90,20 @@ class PresentationBlueprint(MethodView, BaseRoute):
     def post(self):
         super().post()
 
+        # Check if first step it's ok
         if not self._persistence.check_is_correct_presentation(request.remote_addr):
             return self.persistence_user_session_response(
-                PresentationErrorPayloadType.ARGS_NOT_PRESENT,
-                PresentationErrorPayloadType.MAXIMUM_NUMBER_OF_TRY
+                None,
+                PresentationPayloadType.ARGS_NOT_PRESENT,
+                PresentationPayloadType.MAXIMUM_NUMBER_OF_TRY
             )
+
+        # obtain post and check:
+        # 1) calculated time
+        # 2) device's name
+        # 3) mac address
+        post = request.form
+
 
 
     def put(self):
@@ -94,9 +112,17 @@ class PresentationBlueprint(MethodView, BaseRoute):
     def trace(self):
         super().trace()
 
-    def persistence_user_session_response(self, shadow_ban: PresentationErrorPayloadType,
-                                          ban: PresentationErrorPayloadType):
+    def persistence_user_session_response(
+            self,
+            ok: PresentationPayloadType | None,
+            shadow_ban: PresentationPayloadType,
+            ban: PresentationPayloadType
+    ):
         match self._persistence.register_incident(request.remote_addr):
+            case UserSessionState.OK:
+                return RestrictedInfoResponse(
+                    PresentationOkPayload(ok)
+                )
             case UserSessionState.SHADOW_BAN:
                 return RestrictedInfoResponse(
                     PresentationErrorPayload(shadow_ban)

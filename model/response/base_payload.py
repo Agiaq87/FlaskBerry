@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class BasePayload(ABC):
 
     @abstractmethod
-    def jsonify(self) -> str:
+    def jsonify(self) -> {}:
         pass
 
     @abstractmethod

@@ -2,7 +2,7 @@ from model.response.base_payload import BasePayload
 from model.response.implementation.payload.presentation_error_payload_type import PresentationPayloadType
 
 
-class PresentationErrorPayload(BasePayload):
+class PresentationOkPayload(BasePayload):
     def __init__(self, presentation_type: PresentationPayloadType):
         self.message = presentation_type.value
 

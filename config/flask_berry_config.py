@@ -15,6 +15,7 @@ class FlaskBerryConfig(metaclass=Singleton):
         self._num_of_response += 1
         return self._num_of_response
 
+    # Number of attempt for presentation
     def number_of_try_for_presentation(self) -> int:
         return 3
 

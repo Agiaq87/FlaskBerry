@@ -2,6 +2,7 @@ import threading
 
 from config.flask_berry_config import FlaskBerryConfig
 from config.singleton import Singleton
+from model.http.http_methods import HttpMethod
 from model.state.user_session_state import UserSessionState
 from util.net_converter import mac_from_ip
 
@@ -11,10 +12,19 @@ class PersistenceUserSessionManager(metaclass=Singleton):
         self._retrieveDictionary = {"0.1.0.1": 0}
         self._banDictionary = {"0.1.0.1": 0}
         self._waitingForUnlockBanList = {"0.1.0.1": threading.Timer}
-        self._presentedUser = {"0.1.0.1": False}
+        self._presentedUser = {"0.1.0.1": {HttpMethod.GET: [1, False]}}
 
-    def register_correct_presentation(self, ip_address: str):
-        self._presentedUser[mac_from_ip(ip_address)] = True
+    # Also detect number or presentation with method
+    def register_correct_presentation(self, ip_address: str, http_method: HttpMethod) -> UserSessionState:
+        calculated_mac = mac_from_ip(ip_address)
+        if calculated_mac not in self._presentedUser.keys():
+            self._presentedUser[mac_from_ip(ip_address)] = {http_method: [1, True]}
+            return UserSessionState.OK
+
+        self._presentedUser[calculated_mac][http_method][0] += 1
+        counted = self._presentedUser[calculated_mac][http_method][0]
+        if counted >= FlaskBerryConfig().number_of_try_for_presentation():
+            return self.register_incident(ip_address)
 
     def register_incident(self, ip_address: str) -> UserSessionState:
         mac_address = mac_from_ip(ip_address)
@@ -72,4 +82,5 @@ class PersistenceUserSessionManager(metaclass=Singleton):
             mac_address] >= FlaskBerryConfig().number_for_permaban()
 
     def check_is_correct_presentation(self, ip_address: str):
-        return mac_from_ip(ip_address) in self._presentedUser
+        mac = mac_from_ip(ip_address)
+        return mac in self._presentedUser and self._presentedUser[mac][1] == True
