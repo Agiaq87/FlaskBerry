@@ -104,8 +104,6 @@ class PresentationBlueprint(MethodView, BaseRoute):
         # 3) mac address
         post = request.form
 
-
-
     def put(self):
         super().put()
 
