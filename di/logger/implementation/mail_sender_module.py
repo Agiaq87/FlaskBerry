@@ -1,4 +1,4 @@
-from di.module.base_mail_sender_module import BaseMailSenderModule
+from di.logger.base_mail_sender_module import BaseMailSenderModule
 from model.mail.base_mail import BaseMail
 from model.writer.base_serializable import BaseSerializable
 

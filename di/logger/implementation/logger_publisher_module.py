@@ -1,7 +1,7 @@
 from config.flask_berry_config import FlaskBerryConfig
-from di.module.base_file_writer_module import BaseFileWriterModule
-from di.module.base_logger_publisher_module import BaseLoggerPublisherModule
-from di.module.base_mail_sender_module import BaseMailSenderModule
+from di.logger.base_file_writer_module import BaseFileWriterModule
+from di.logger.base_logger_publisher_module import BaseLoggerPublisherModule
+from di.logger.base_mail_sender_module import BaseMailSenderModule
 from model.critic_level import CriticLevel
 from model.writer.implementation.log_message import LogMessage
 
